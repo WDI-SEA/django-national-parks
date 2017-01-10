@@ -34,6 +34,52 @@ types for each (string or text)
 | PUT /parks/3      | update an existing park (id=3) | parks      | update (no view)  |
 | DELETE /parks/3   | delete an existing park (id=3) | parks      | destroy (no view) |
 
+### Recommended Process
+#### Create basic app
+- fork and clone this repo
+- cd into the directory
+- create Django project `django-admin startproject parks_site`
+- create app in project `python3 manage.py parks`
+- run the server! `python3 manage.py runserver` 
+
+#### Build Specific Functionality
+Define a view in parks/views.py
+
+```py
+from django.http import HttpResponse
+
+def index(request):
+  return HttpResponse("This will become a list of all Parks.")
+```
+
+Create a route in  the parks app `parks/urls.py`:
+
+```py
+from django.conf.urls import url
+
+from . import views
+
+urlpatterns = [
+  url(r'^$', views.index, name='index'),
+]
+```
+
+Attach the parks app to the main site by defining how URLs are routed to it
+in `parks_site/urls.py`:
+
+```py
+from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+  url(r'^parks/', include('parks.urls')),
+  url(r'^admin/', admin.site.urls),
+]
+```
+
+Run the server and verify that everything is wired up correctly by visiting
+<http://localhost:8000/parks/>
+
 ### Styling
 - Style the pages. Play around with adding a navigation bar or carousels.
 - If using Bootstrap, use the Bootstrap form helper. Makes Bootstrap forms easily.
